@@ -9,6 +9,7 @@ namespace Microsoft.Azure.Search
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Azure.Search.Models;
+    using Microsoft.Rest;
     using Microsoft.Rest.Azure;
 
     /// <summary>
@@ -180,6 +181,42 @@ namespace Microsoft.Azure.Search
             IndexListResult indexList = 
                 await operations.ListAsync(select: "name", searchRequestOptions: searchRequestOptions, cancellationToken: cancellationToken).ConfigureAwait(false);
             return GetIndexNames(indexList);
+        }
+
+        /// <summary>
+        /// Creates an index where the fields correspond to the properties of the supplied type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type whose properties determine the fields to create in the index.
+        /// </typeparam>
+        /// <param name="operations">
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name="name">
+        /// The name of the new index
+        /// </param>
+        /// <param name="searchRequestOptions">
+        /// Additional parameters for the operation
+        /// </param>
+        /// <returns></returns>
+        public static Index CreateForType<T>(
+            this IIndexesOperations operations,
+            string name,
+            SearchRequestOptions searchRequestOptions = default(SearchRequestOptions))
+        {
+            Index index = IndexFromType.Create<T>(((IServiceOperations<SearchServiceClient>) operations).Client.SerializationSettings);
+            index.Name = name;
+            return operations.Create(index, searchRequestOptions);
+        }
+
+        public static Task<Index> CreateForTypeAsync<T>(
+            this IIndexesOperations operations,
+            string name,
+            SearchRequestOptions searchRequestOptions = default(SearchRequestOptions))
+        {
+            Index index = IndexFromType.Create<T>(((IServiceOperations<SearchServiceClient>) operations).Client.SerializationSettings);
+            index.Name = name;
+            return operations.CreateAsync(index, searchRequestOptions);
         }
 
         private static IList<string> GetIndexNames(IndexListResult indexListResult)
