@@ -63,6 +63,12 @@ namespace Microsoft.Azure.Search.Tests
         }
 
         [Fact]
+        public void ReportsGeographyPointProperties()
+        {
+            Run<ReflectableModel>((index, fields) => Assert.Equal(DataType.GeographyPoint, fields["GeographyPoint"].Type));
+        }
+
+        [Fact]
         public void ReportsStringArrayProperties()
         {
             Run<ReflectableModel>((index, fields) => Assert.Equal(DataType.Collection(DataType.String), fields["StringArray"].Type));

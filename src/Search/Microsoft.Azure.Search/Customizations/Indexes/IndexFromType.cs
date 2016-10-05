@@ -110,6 +110,10 @@ namespace Microsoft.Azure.Search
             {
                 return DataType.DateTimeOffset;
             }
+            if (propertyType == typeof(Microsoft.Spatial.GeographyPoint))
+            {
+                return DataType.GeographyPoint;
+            }
             Type elementType = GetElementTypeIfList(propertyType);
             if (elementType != null)
             {

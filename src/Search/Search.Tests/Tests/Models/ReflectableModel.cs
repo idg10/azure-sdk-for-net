@@ -53,5 +53,7 @@ namespace Microsoft.Azure.Search.Tests
         public List<string> StringList { get; set; }
 
         public int? NullableInt { get; set; }
+
+        public Microsoft.Spatial.GeographyPoint GeographyPoint { get; set; }
     }
 }
