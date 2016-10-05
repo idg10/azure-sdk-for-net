@@ -13,20 +13,45 @@ namespace Microsoft.Azure.Search.Tests
     {
         [Key]
         public int Id { get; set; }
+
         public long BigNumber { get; set; }
+
         public double Double { get; set; }
+
         public bool Flag { get; set; }
+
         public DateTimeOffset Time { get; set; }
+
         public DateTime TimeWithoutOffset { get; set; }
+
         [IsSearchable]
         public string Text { get; set; }
+
         public string UnsearchableText { get; set; }
+
         [IsSearchable]
         public string MoreText { get; set; }
+
+        [IsFilterable]
+        public string FilterableText { get; set; }
+
+        [IsSortable]
+        public string SortableText { get; set; }
+
+        [IsFacetable]
+        public string FacetableText { get; set; }
+
+        [IsNotRetrievable]
+        public string IrretrievableText { get; set; }
+
         public string[] StringArray { get; set; }
+
         public int[] IntArray { get; set; }
+
         public IList<string> StringIList { get; set; }
+
         public List<string> StringList { get; set; }
+
         public int? NullableInt { get; set; }
     }
 }

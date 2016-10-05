@@ -86,37 +86,64 @@ namespace Microsoft.Azure.Search.Tests
             Run<ReflectableModel>((index, fields) => Assert.Equal(DataType.Collection(DataType.String), fields["StringList"].Type));
         }
 
-        [Fact]
-        public void ReportsKeyOnPropertyWithKeyAttribute()
-        {
-            Run<ReflectableModel>((index, fields) => Assert.True(fields["Id"].IsKey));
-
-        }
-
-        [Fact]
-        public void DoesNotReportKeyOnPropertiesWithoutKeyAttribute()
-        {
-            Run<ReflectableModel>((index, fields) =>
-                Assert.False(fields.Any(f => f.Key != "Id" && f.Value.IsKey)));
-
-        }
-
-        [Fact]
-        public void ReportsIsSearchableOnPropertyWithIsSearchableAttribute()
+        private void OnlyTrueFor(Func<Field, bool> check, params string[] ids)
         {
             Run<ReflectableModel>((index, fields) =>
             {
-                Assert.True(fields["Text"].IsSearchable);
-                Assert.True(fields["MoreText"].IsSearchable);
+                foreach (var kv in fields)
+                {
+                    string id = kv.Key;
+                    Field field = kv.Value;
+                    bool result = check(field);
+                    if (ids.Contains(id))
+                    {
+                        Assert.True(result);
+                    }
+                    else
+                    {
+                        Assert.False(result);
+                    }
+                }
             });
+        }
+        private void OnlyFalseFor(Func<Field, bool> check, params string[] ids) =>
+            OnlyTrueFor(f => !check(f), ids);
+
+        [Fact]
+        public void ReportsKeyOnlyOnPropertyWithKeyAttribute()
+        {
+            OnlyTrueFor(field => field.IsKey, nameof(ReflectableModel.Id));
 
         }
 
         [Fact]
-        public void DoesNotReportIsSearchableOnPropertiesIsSearchableKeyAttribute()
+        public void ReportsIsSearchableOnlyOnPropertiesWithIsSearchableAttribute()
         {
-            Run<ReflectableModel>((index, fields) =>
-                Assert.False(fields.Any(f => f.Key != "Text" && f.Key != "MoreText" && f.Value.IsSearchable)));
+            OnlyTrueFor(field => field.IsSearchable, nameof(ReflectableModel.Text), nameof(ReflectableModel.MoreText));
+        }
+
+        [Fact]
+        public void IsFilterableOnlyOnPropertiesWithIsFilterableAttribute()
+        {
+            OnlyTrueFor(field => field.IsFilterable, nameof(ReflectableModel.FilterableText));
+        }
+
+        [Fact]
+        public void IsSortableOnlyOnPropertiesWithIsSortableAttribute()
+        {
+            OnlyTrueFor(field => field.IsSortable, nameof(ReflectableModel.SortableText));
+        }
+
+        [Fact]
+        public void IsFacetableOnlyOnPropertiesWithIsFacetableAttribute()
+        {
+            OnlyTrueFor(field => field.IsFacetable, nameof(ReflectableModel.FacetableText));
+        }
+
+        [Fact]
+        public void IsRetrievableOnAllPropertiesExceptOnesWithIsNotRetrievableAttribute()
+        {
+            OnlyFalseFor(field => field.IsRetrievable, nameof(ReflectableModel.IrretrievableText));
         }
 
         private void Run<T>(Action<Index, Dictionary<string, Field>> run)

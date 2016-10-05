@@ -53,6 +53,22 @@ namespace Microsoft.Azure.Search
                     {
                         field.IsSearchable = true;
                     }
+                    else if (attributeType == typeof(IsFilterableAttribute))
+                    {
+                        field.IsFilterable = true;
+                    }
+                    else if (attributeType == typeof(IsSortableAttribute))
+                    {
+                        field.IsSortable = true;
+                    }
+                    else if (attributeType == typeof(IsFacetableAttribute))
+                    {
+                        field.IsFacetable = true;
+                    }
+                    else if (attributeType == typeof(IsNotRetrievableAttribute))
+                    {
+                        field.IsRetrievable = false;
+                    }
                 }
 
                 fields.Add(field);
