@@ -87,6 +87,12 @@ namespace Microsoft.Azure.Search.Tests
         }
 
         [Fact]
+        public void ReportsStringIEnumerableProperties()
+        {
+            Run<ReflectableModel>((index, fields) => Assert.Equal(DataType.Collection(DataType.String), fields["StringIEnumerable"].Type));
+        }
+
+        [Fact]
         public void ReportsStringListProperties()
         {
             Run<ReflectableModel>((index, fields) => Assert.Equal(DataType.Collection(DataType.String), fields["StringList"].Type));

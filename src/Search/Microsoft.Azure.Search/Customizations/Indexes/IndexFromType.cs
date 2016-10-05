@@ -114,7 +114,7 @@ namespace Microsoft.Azure.Search
             {
                 return DataType.GeographyPoint;
             }
-            Type elementType = GetElementTypeIfList(propertyType);
+            Type elementType = GetElementTypeIfIEnumerable(propertyType);
             if (elementType != null)
             {
                 return DataType.Collection(GetDataType(elementType, propertyName));
@@ -122,7 +122,7 @@ namespace Microsoft.Azure.Search
             TypeInfo ti = propertyType.GetTypeInfo();
             var listElementTypes = ti
                 .ImplementedInterfaces
-                .Select(GetElementTypeIfList)
+                .Select(GetElementTypeIfIEnumerable)
                 .Where(p => p != null)
                 .ToList();
             if (listElementTypes.Count == 1)
@@ -135,8 +135,8 @@ namespace Microsoft.Azure.Search
                 nameof(propertyType));
         }
 
-        private static Type GetElementTypeIfList(Type t) =>
-            t.IsConstructedGenericType && t.GetGenericTypeDefinition() == typeof(IList<>)
+        private static Type GetElementTypeIfIEnumerable(Type t) =>
+            t.IsConstructedGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)
                 ? t.GenericTypeArguments[0]
                 : null;
     }
