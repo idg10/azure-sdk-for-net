@@ -21,17 +21,17 @@ namespace Microsoft.Azure.Search
         /// <typeparam name="T">
         /// The type for which fields will be created, based on its properties.
         /// </typeparam>
-        /// <param name="serializationSettings">
-        /// Serialization settings to use. These should be the same as those in use by
-        /// the search index client, to ensure that the field names are generated in
+        /// <param name="contractResolver">
+        /// Contract resolver that the <see cref="SearchIndexClient"/> will use.
+        /// This ensures that the field names are generated in
         /// a way that is consistent with the way the model will be serialized.
         /// </param>
         /// <returns>An Index.</returns>
-        public static Index Create<T>(JsonSerializerSettings serializationSettings)
+        public static Index Create<T>(IContractResolver contractResolver)
         {
             Index index = new Index();
 
-            var contract = (JsonObjectContract) serializationSettings.ContractResolver.ResolveContract(typeof(T));
+            var contract = (JsonObjectContract) contractResolver.ResolveContract(typeof(T));
             var fields = new List<Field>();
             foreach (JsonProperty prop in contract.Properties)
             {

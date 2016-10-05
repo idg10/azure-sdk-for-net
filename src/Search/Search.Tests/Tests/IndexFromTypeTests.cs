@@ -121,20 +121,7 @@ namespace Microsoft.Azure.Search.Tests
 
         private void Run<T>(Action<Index, Dictionary<string, Field>> run)
         {
-            Index index = IndexFromType.Create<T>(
-                new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented,
-                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                    ContractResolver = new ReadOnlyJsonContractResolver(),
-                    Converters = new List<JsonConverter>
-                    {
-                        new Iso8601TimeSpanConverter()
-                    }
-                });
+            Index index = IndexFromType.Create<T>(new ReadOnlyJsonContractResolver());
             Dictionary<string, Field> fields = index.Fields.ToDictionary(f => f.Name);
             run(index, fields);
         }

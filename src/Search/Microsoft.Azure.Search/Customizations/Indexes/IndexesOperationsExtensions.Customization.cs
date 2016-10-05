@@ -204,7 +204,8 @@ namespace Microsoft.Azure.Search
             string name,
             SearchRequestOptions searchRequestOptions = default(SearchRequestOptions))
         {
-            Index index = IndexFromType.Create<T>(((IServiceOperations<SearchServiceClient>) operations).Client.SerializationSettings);
+            Index index = IndexFromType.Create<T>(
+                ((IServiceOperations<SearchServiceClient>) operations).Client.SerializationSettings.ContractResolver);
             index.Name = name;
             return operations.Create(index, searchRequestOptions);
         }
@@ -214,7 +215,8 @@ namespace Microsoft.Azure.Search
             string name,
             SearchRequestOptions searchRequestOptions = default(SearchRequestOptions))
         {
-            Index index = IndexFromType.Create<T>(((IServiceOperations<SearchServiceClient>) operations).Client.SerializationSettings);
+            Index index = IndexFromType.Create<T>(
+                ((IServiceOperations<SearchServiceClient>) operations).Client.SerializationSettings.ContractResolver);
             index.Name = name;
             return operations.CreateAsync(index, searchRequestOptions);
         }
