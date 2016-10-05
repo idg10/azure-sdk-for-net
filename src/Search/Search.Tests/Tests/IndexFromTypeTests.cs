@@ -1,18 +1,17 @@
-﻿using Microsoft.Azure.Search;
-using Microsoft.Azure.Search.Models;
-using Microsoft.Azure.Search.Tests;
-using Microsoft.Azure.Search.Tests.Utilities;
-using Microsoft.Rest.Serialization;
-using Newtonsoft.Json;
-using Search.Tests.Tests.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See License.txt in the project root for
+// license information.
 
-namespace Search.Tests.Tests
+namespace Microsoft.Azure.Search.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.Azure.Search.Models;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class IndexFromTypeTests
     {
         [Fact]

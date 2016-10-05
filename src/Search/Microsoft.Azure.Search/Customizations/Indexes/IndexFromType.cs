@@ -1,13 +1,17 @@
-﻿using Microsoft.Azure.Search.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See License.txt in the project root for
+// license information.
 
 namespace Microsoft.Azure.Search
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Microsoft.Azure.Search.Models;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
+
     public static class IndexFromType
     {
         /// <summary>
@@ -108,7 +112,7 @@ namespace Microsoft.Azure.Search
 
             throw new ArgumentException(
                 $"Property {propertyName} has unsupported type {propertyType}",
-                    nameof(T));
+                nameof(propertyType));
         }
 
         private static Type GetElementTypeIfList(Type t) =>
