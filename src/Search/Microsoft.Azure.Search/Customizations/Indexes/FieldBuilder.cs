@@ -9,28 +9,25 @@ namespace Microsoft.Azure.Search
     using System.Linq;
     using System.Reflection;
     using Microsoft.Azure.Search.Models;
-    using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 
-    public static class IndexFromType
+    public static class FieldBuilder
     {
         /// <summary>
-        /// Creates an <see cref="Index"/> with fields matching the properties of
-        /// the type supplied.
+        /// Creates a collection of <see cref="Field"/> objects corresponding to
+        /// the properties of the type supplied.
         /// </summary>
         /// <typeparam name="T">
         /// The type for which fields will be created, based on its properties.
         /// </typeparam>
         /// <param name="contractResolver">
         /// Contract resolver that the <see cref="SearchIndexClient"/> will use.
-        /// This ensures that the field names are generated in
-        /// a way that is consistent with the way the model will be serialized.
+        /// This ensures that the field names are generated in a way that is
+        /// consistent with the way the model will be serialized.
         /// </param>
-        /// <returns>An Index.</returns>
-        public static Index Create<T>(IContractResolver contractResolver)
+        /// <returns>A collection of fields.</returns>
+        public static IList<Field> BuildForType<T>(IContractResolver contractResolver)
         {
-            Index index = new Index();
-
             var contract = (JsonObjectContract) contractResolver.ResolveContract(typeof(T));
             var fields = new List<Field>();
             foreach (JsonProperty prop in contract.Properties)
@@ -74,8 +71,7 @@ namespace Microsoft.Azure.Search
                 fields.Add(field);
             }
 
-            index.Fields = fields;
-            return index;
+            return fields;
         }
 
         private static DataType GetDataType(Type propertyType, string propertyName)
