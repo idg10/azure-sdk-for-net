@@ -8,6 +8,7 @@ namespace Microsoft.Azure.Search.Tests
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Microsoft.Azure.Search;
+    using Microsoft.Spatial;
 
     public class ReflectableModel
     {
@@ -56,6 +57,6 @@ namespace Microsoft.Azure.Search.Tests
 
         public int? NullableInt { get; set; }
 
-        public Microsoft.Spatial.GeographyPoint GeographyPoint { get; set; }
+        public GeographyPoint GeographyPoint { get; set; }
     }
 }

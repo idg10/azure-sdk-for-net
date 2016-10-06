@@ -9,6 +9,7 @@ namespace Microsoft.Azure.Search
     using System.Linq;
     using System.Reflection;
     using Microsoft.Azure.Search.Models;
+    using Microsoft.Spatial;
     using Newtonsoft.Json.Serialization;
 
     public static class FieldBuilder
@@ -106,7 +107,7 @@ namespace Microsoft.Azure.Search
             {
                 return DataType.DateTimeOffset;
             }
-            if (propertyType == typeof(Microsoft.Spatial.GeographyPoint))
+            if (propertyType == typeof(GeographyPoint))
             {
                 return DataType.GeographyPoint;
             }
