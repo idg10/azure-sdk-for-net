@@ -8,6 +8,7 @@ namespace Microsoft.Azure.Search.Tests
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Microsoft.Azure.Search;
+    using Microsoft.Azure.Search.Models;
     using Microsoft.Spatial;
 
     public class ReflectableModel
@@ -44,6 +45,15 @@ namespace Microsoft.Azure.Search.Tests
 
         [IsNotRetrievable]
         public string IrretrievableText { get; set; }
+
+        [Analyzer(AnalyzerName.AsString.EnMicrosoft)]
+        public string TextWithAnalyzer { get; set; }
+
+        [SearchAnalyzer(AnalyzerName.AsString.EsLucene)]
+        public string TextWithSearchAnalyzer { get; set; }
+
+        [IndexAnalyzer(AnalyzerName.AsString.Whitespace)]
+        public string TextWithIndexAnalyzer { get; set; }
 
         public string[] StringArray { get; set; }
 

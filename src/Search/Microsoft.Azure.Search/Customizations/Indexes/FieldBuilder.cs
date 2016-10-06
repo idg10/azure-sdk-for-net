@@ -67,6 +67,18 @@ namespace Microsoft.Azure.Search
                     {
                         field.IsRetrievable = false;
                     }
+                    else if (attributeType == typeof(AnalyzerAttribute))
+                    {
+                        field.Analyzer = AnalyzerName.Create(((AnalyzerAttribute) attribute).Name);
+                    }
+                    else if (attributeType == typeof(SearchAnalyzerAttribute))
+                    {
+                        field.SearchAnalyzer = AnalyzerName.Create(((SearchAnalyzerAttribute) attribute).Name);
+                    }
+                    else if (attributeType == typeof(IndexAnalyzerAttribute))
+                    {
+                        field.IndexAnalyzer = AnalyzerName.Create(((IndexAnalyzerAttribute) attribute).Name);
+                    }
                 }
 
                 fields.Add(field);

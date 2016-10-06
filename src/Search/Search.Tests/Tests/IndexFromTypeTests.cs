@@ -118,6 +118,7 @@ namespace Microsoft.Azure.Search.Tests
                 }
             });
         }
+
         private void OnlyFalseFor(Func<Field, bool> check, params string[] ids) =>
             OnlyTrueFor(f => !check(f), ids);
 
@@ -156,6 +157,24 @@ namespace Microsoft.Azure.Search.Tests
         public void IsRetrievableOnAllPropertiesExceptOnesWithIsNotRetrievableAttribute()
         {
             OnlyFalseFor(field => field.IsRetrievable, nameof(ReflectableModel.IrretrievableText));
+        }
+
+        [Fact]
+        public void AnalyzerSetOnlyOnPropertiesWithAnalyzerAttribute()
+        {
+            OnlyTrueFor(field => field.Analyzer == AnalyzerName.EnMicrosoft, nameof(ReflectableModel.TextWithAnalyzer));
+        }
+
+        [Fact]
+        public void SearchAnalyzerSetOnlyOnPropertiesWithSearchAnalyzerAttribute()
+        {
+            OnlyTrueFor(field => field.SearchAnalyzer == AnalyzerName.EsLucene, nameof(ReflectableModel.TextWithSearchAnalyzer));
+        }
+
+        [Fact]
+        public void IndexAnalyzerSetOnlyOnPropertiesWithIndexAnalyzerAttribute()
+        {
+            OnlyTrueFor(field => field.IndexAnalyzer == AnalyzerName.Whitespace, nameof(ReflectableModel.TextWithIndexAnalyzer));
         }
 
         private void Run<T>(Action<Dictionary<string, Field>> run)
