@@ -9,7 +9,6 @@ namespace Microsoft.Azure.Search.Tests
     using System.Linq;
     using Microsoft.Azure.Search.Models;
     using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
     using Xunit;
 
     public class IndexFromTypeTests
@@ -17,84 +16,84 @@ namespace Microsoft.Azure.Search.Tests
         [Fact]
         public void ReportsStringProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.String, fields["Text"].Type));
+            Run(fields => Assert.Equal(DataType.String, fields["Text"].Type));
         }
 
         [Fact]
         public void ReportsInt32Properties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Int32, fields["Id"].Type));
+            Run(fields => Assert.Equal(DataType.Int32, fields["Id"].Type));
         }
 
         [Fact]
         public void ReportsNullableInt32Properties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Int32, fields["NullableInt"].Type));
+            Run(fields => Assert.Equal(DataType.Int32, fields["NullableInt"].Type));
         }
 
         [Fact]
         public void ReportsInt64Properties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Int64, fields["BigNumber"].Type));
+            Run(fields => Assert.Equal(DataType.Int64, fields["BigNumber"].Type));
         }
 
         [Fact]
         public void ReportsDoubleProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Double, fields["Double"].Type));
+            Run(fields => Assert.Equal(DataType.Double, fields["Double"].Type));
         }
 
         [Fact]
         public void ReportsBooleanProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Boolean, fields["Flag"].Type));
+            Run(fields => Assert.Equal(DataType.Boolean, fields["Flag"].Type));
         }
 
         [Fact]
         public void ReportsDateTimeOffsetProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.DateTimeOffset, fields["Time"].Type));
+            Run(fields => Assert.Equal(DataType.DateTimeOffset, fields["Time"].Type));
         }
 
         [Fact]
         public void ReportsDateTimeProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.DateTimeOffset, fields["TimeWithoutOffset"].Type));
+            Run(fields => Assert.Equal(DataType.DateTimeOffset, fields["TimeWithoutOffset"].Type));
         }
 
         [Fact]
         public void ReportsGeographyPointProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.GeographyPoint, fields["GeographyPoint"].Type));
+            Run(fields => Assert.Equal(DataType.GeographyPoint, fields["GeographyPoint"].Type));
         }
 
         [Fact]
         public void ReportsStringArrayProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringArray"].Type));
+            Run(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringArray"].Type));
         }
 
         [Fact]
         public void ReportsStringIListProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringIList"].Type));
+            Run(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringIList"].Type));
         }
 
         [Fact]
         public void ReportsStringIEnumerableProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringIEnumerable"].Type));
+            Run(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringIEnumerable"].Type));
         }
 
         [Fact]
         public void ReportsStringListProperties()
         {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringList"].Type));
+            Run(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringList"].Type));
         }
 
         private void OnlyTrueFor(Func<Field, bool> check, params string[] ids)
         {
-            Run<ReflectableModel>(fields =>
+            Run(fields =>
             {
                 foreach (var kv in fields)
                 {
@@ -120,7 +119,6 @@ namespace Microsoft.Azure.Search.Tests
         public void ReportsKeyOnlyOnPropertyWithKeyAttribute()
         {
             OnlyTrueFor(field => field.IsKey, nameof(ReflectableModel.Id));
-
         }
 
         [Fact]
@@ -171,9 +169,30 @@ namespace Microsoft.Azure.Search.Tests
             OnlyTrueFor(field => field.IndexAnalyzer == AnalyzerName.Whitespace, nameof(ReflectableModel.TextWithIndexAnalyzer));
         }
 
-        private void Run<T>(Action<Dictionary<string, Field>> run)
+        [Fact]
+        public void HonoursSerializePropertyNamesAsCamelCaseAttribute()
         {
-            IList<Field> fields = FieldBuilder.BuildForType<T>(new ReadOnlyJsonContractResolver());
+            RunCamelCase(fieldMap =>
+            {
+                Assert.True(fieldMap.ContainsKey("id"));
+                Assert.True(fieldMap.ContainsKey("myProperty"));
+            });
+        }
+
+        private void Run(Action<Dictionary<string, Field>> run)
+        {
+            // Test with both with and without bring-your-own-resolver.
+            RunForFields(run, FieldBuilder.BuildForType<ReflectableModel>(new ReadOnlyJsonContractResolver()));
+            RunForFields(run, FieldBuilder.BuildForType<ReflectableModel>());
+        }
+
+        private void RunCamelCase(Action<Dictionary<string, Field>> run)
+        {
+            RunForFields(run, FieldBuilder.BuildForType<ReflectableCamelCaseModel>());
+        }
+
+        private void RunForFields(Action<Dictionary<string, Field>> run, IList<Field> fields)
+        {
             Dictionary<string, Field> fieldMap = fields.ToDictionary(f => f.Name);
             run(fieldMap);
         }

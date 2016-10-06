@@ -21,14 +21,37 @@ namespace Microsoft.Azure.Search
         /// <typeparam name="T">
         /// The type for which fields will be created, based on its properties.
         /// </typeparam>
+        /// <returns>A collection of fields.</returns>
+        public static IList<Field> BuildForType<T>()
+        {
+            bool useCamelCase = SerializePropertyNamesAsCamelCaseAttribute.IsDefinedOnType<T>();
+            IContractResolver resolver = useCamelCase
+                ? JsonUtility.CamelCaseResolver
+                : JsonUtility.DefaultResolver;
+            return BuildForType<T>(resolver);
+        }
+
+        /// <summary>
+        /// Creates a collection of <see cref="Field"/> objects corresponding to
+        /// the properties of the type supplied.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type for which fields will be created, based on its properties.
+        /// </typeparam>
         /// <param name="contractResolver">
         /// Contract resolver that the <see cref="SearchIndexClient"/> will use.
         /// This ensures that the field names are generated in a way that is
         /// consistent with the way the model will be serialized.
         /// </param>
         /// <returns>A collection of fields.</returns>
+        /// <remarks>
+        /// Use this overload if you are using a custom contract resolver in the
+        /// serialization settings of your <see cref="SearchServiceClient"/> and
+        /// <see cref="SearchIndexClient"/>.
+        /// </remarks>
         public static IList<Field> BuildForType<T>(IContractResolver contractResolver)
         {
+
             var contract = (JsonObjectContract) contractResolver.ResolveContract(typeof(T));
             var fields = new List<Field>();
             foreach (JsonProperty prop in contract.Properties)
