@@ -57,8 +57,6 @@ namespace Microsoft.Azure.Search.Tests
 
         public string[] StringArray { get; set; }
 
-        public int[] IntArray { get; set; }
-
         public IList<string> StringIList { get; set; }
 
         public List<string> StringList { get; set; }

@@ -75,12 +75,6 @@ namespace Microsoft.Azure.Search.Tests
         }
 
         [Fact]
-        public void ReportsIntArrayProperties()
-        {
-            Run<ReflectableModel>(fields => Assert.Equal(DataType.Collection(DataType.Int32), fields["IntArray"].Type));
-        }
-
-        [Fact]
         public void ReportsStringIListProperties()
         {
             Run<ReflectableModel>(fields => Assert.Equal(DataType.Collection(DataType.String), fields["StringIList"].Type));
