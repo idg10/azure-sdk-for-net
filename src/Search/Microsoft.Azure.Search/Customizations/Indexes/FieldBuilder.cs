@@ -51,7 +51,6 @@ namespace Microsoft.Azure.Search
         /// </remarks>
         public static IList<Field> BuildForType<T>(IContractResolver contractResolver)
         {
-
             var contract = (JsonObjectContract) contractResolver.ResolveContract(typeof(T));
             var fields = new List<Field>();
             foreach (JsonProperty prop in contract.Properties)
