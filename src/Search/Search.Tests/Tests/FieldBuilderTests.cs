@@ -11,7 +11,7 @@ namespace Microsoft.Azure.Search.Tests
     using Microsoft.Rest.Serialization;
     using Xunit;
 
-    public class IndexFromTypeTests
+    public class FieldBuilderTests
     {
         [Fact]
         public void ReportsStringProperties()
