@@ -43,8 +43,11 @@ namespace Microsoft.Azure.Search.Tests
         [IsFacetable]
         public string FacetableText { get; set; }
 
-        [IsNotRetrievable]
+        [IsRetrievable(false)]
         public string IrretrievableText { get; set; }
+
+        [IsRetrievable(true)]
+        public string ExplicitlyRetrievableText { get; set; }
 
         [Analyzer(AnalyzerName.AsString.EnMicrosoft)]
         public string TextWithAnalyzer { get; set; }

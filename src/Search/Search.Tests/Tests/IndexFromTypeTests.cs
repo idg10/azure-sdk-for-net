@@ -146,7 +146,7 @@ namespace Microsoft.Azure.Search.Tests
         }
 
         [Fact]
-        public void IsRetrievableOnAllPropertiesExceptOnesWithIsNotRetrievableAttribute()
+        public void IsRetrievableOnAllPropertiesExceptOnesWithIsRetrievableAttributeSetToFalse()
         {
             OnlyFalseFor(field => field.IsRetrievable, nameof(ReflectableModel.IrretrievableText));
         }

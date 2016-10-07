@@ -63,6 +63,7 @@ namespace Microsoft.Azure.Search
                 IList<Attribute> attributes = prop.AttributeProvider.GetAttributes(true);
                 foreach (Attribute attribute in attributes)
                 {
+                    IsRetrievableAttribute isRetrievableAttribute;
                     AnalyzerAttribute analyzerAttribute;
                     SearchAnalyzerAttribute searchAnalyzerAttribute;
                     IndexAnalyzerAttribute indexAnalyzerAttribute;
@@ -82,9 +83,9 @@ namespace Microsoft.Azure.Search
                     {
                         field.IsFacetable = true;
                     }
-                    else if (attribute is IsNotRetrievableAttribute)
+                    else if ((isRetrievableAttribute = attribute as IsRetrievableAttribute) != null)
                     {
-                        field.IsRetrievable = false;
+                        field.IsRetrievable = isRetrievableAttribute.IsRetrievable;
                     }
                     else if ((analyzerAttribute = attribute as AnalyzerAttribute) != null)
                     {
