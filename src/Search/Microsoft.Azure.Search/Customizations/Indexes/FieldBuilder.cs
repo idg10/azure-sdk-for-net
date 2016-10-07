@@ -63,44 +63,50 @@ namespace Microsoft.Azure.Search
                 IList<Attribute> attributes = prop.AttributeProvider.GetAttributes(true);
                 foreach (Attribute attribute in attributes)
                 {
-                    // Match on name to avoid dependency - don't want to force people not using
-                    // this feature to bring in the annotations component.
-                    Type attributeType = attribute.GetType();
-                    if (attributeType.FullName == "System.ComponentModel.DataAnnotations.KeyAttribute")
-                    {
-                        field.IsKey = true;
-                    }
-                    else if (attributeType == typeof(IsSearchableAttribute))
+                    AnalyzerAttribute analyzerAttribute;
+                    SearchAnalyzerAttribute searchAnalyzerAttribute;
+                    IndexAnalyzerAttribute indexAnalyzerAttribute;
+                    if (attribute is IsSearchableAttribute)
                     {
                         field.IsSearchable = true;
                     }
-                    else if (attributeType == typeof(IsFilterableAttribute))
+                    else if (attribute is IsFilterableAttribute)
                     {
                         field.IsFilterable = true;
                     }
-                    else if (attributeType == typeof(IsSortableAttribute))
+                    else if (attribute is IsSortableAttribute)
                     {
                         field.IsSortable = true;
                     }
-                    else if (attributeType == typeof(IsFacetableAttribute))
+                    else if (attribute is IsFacetableAttribute)
                     {
                         field.IsFacetable = true;
                     }
-                    else if (attributeType == typeof(IsNotRetrievableAttribute))
+                    else if (attribute is IsNotRetrievableAttribute)
                     {
                         field.IsRetrievable = false;
                     }
-                    else if (attributeType == typeof(AnalyzerAttribute))
+                    else if ((analyzerAttribute = attribute as AnalyzerAttribute) != null)
                     {
-                        field.Analyzer = AnalyzerName.Create(((AnalyzerAttribute) attribute).Name);
+                        field.Analyzer = AnalyzerName.Create(analyzerAttribute.Name);
                     }
-                    else if (attributeType == typeof(SearchAnalyzerAttribute))
+                    else if ((searchAnalyzerAttribute = attribute as SearchAnalyzerAttribute) != null)
                     {
-                        field.SearchAnalyzer = AnalyzerName.Create(((SearchAnalyzerAttribute) attribute).Name);
+                        field.SearchAnalyzer = AnalyzerName.Create(searchAnalyzerAttribute.Name);
                     }
-                    else if (attributeType == typeof(IndexAnalyzerAttribute))
+                    else if ((indexAnalyzerAttribute = attribute as IndexAnalyzerAttribute) != null)
                     {
                         field.IndexAnalyzer = AnalyzerName.Create(((IndexAnalyzerAttribute) attribute).Name);
+                    }
+                    else
+                    {
+                        // Match on name to avoid dependency - don't want to force people not using
+                        // this feature to bring in the annotations component.
+                        Type attributeType = attribute.GetType();
+                        if (attributeType.FullName == "System.ComponentModel.DataAnnotations.KeyAttribute")
+                        {
+                            field.IsKey = true;
+                        }
                     }
                 }
 
