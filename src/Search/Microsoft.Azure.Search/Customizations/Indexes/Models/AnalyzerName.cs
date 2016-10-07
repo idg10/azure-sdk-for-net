@@ -456,7 +456,7 @@ namespace Microsoft.Azure.Search.Models
 
         /// <summary>
         /// Standard ASCII Folding Lucene analyzer.
-        /// <see href="https://msdn.microsoft.com/en-us/library/azure/mt605304.aspx#Analyzers" /> 
+        /// <see href="https://msdn.microsoft.com/library/azure/mt605304.aspx#Analyzers" /> 
         /// </summary>
         public static readonly AnalyzerName StandardAsciiFoldingLucene =
             new AnalyzerName("standardasciifolding.lucene");
@@ -939,7 +939,7 @@ namespace Microsoft.Azure.Search.Models
 
             /// <summary>
             /// Standard ASCII Folding Lucene analyzer.
-            /// <see href="https://msdn.microsoft.com/en-us/library/azure/mt605304.aspx#Analyzers" /> 
+            /// <see href="https://msdn.microsoft.com/library/azure/mt605304.aspx#Analyzers" /> 
             /// </summary>
             public static readonly AnalyzerName StandardAsciiFoldingLucene =
                 new AnalyzerName("standardasciifolding.lucene");
