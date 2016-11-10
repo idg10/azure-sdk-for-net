@@ -44,11 +44,6 @@ namespace Microsoft.Azure.Search
         /// consistent with the way the model will be serialized.
         /// </param>
         /// <returns>A collection of fields.</returns>
-        /// <remarks>
-        /// Use this overload if you are using a custom contract resolver in the
-        /// serialization settings of your <see cref="SearchServiceClient"/> and
-        /// <see cref="SearchIndexClient"/>.
-        /// </remarks>
         public static IList<Field> BuildForType<T>(IContractResolver contractResolver)
         {
             var contract = (JsonObjectContract) contractResolver.ResolveContract(typeof(T));
